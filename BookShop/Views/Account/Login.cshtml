@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Login Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .login-container .card {
+        width: 400px; 
+        background-color: rgba(255, 255, 255, 0.5); 
+        border-radius: 12px;
+    }
+
+    .login-container .card-body {
+        display: flex; 
+        align-items: center; 
+        flex-direction: column;
+    }
+    
+    .login-container .card label {
+        margin: 12px 0;
+    }
+
+    .login-container .card .btn-login {
+        margin: 16px 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .login-container .card button {
+        
+    }
+</style>
+@await Html.PartialAsync("response")
+<div class="login-container">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title" style="color: #fff">ĐĂNG NHẬP</h5>
+            <form asp-action="Login" asp-controller="Account" method="post" style="width: 100%">
+                <div class="form-group">
+                    <label for="username">TÀI KHOẢN</label>
+                    <input type="text" class="form-control" name="username" required placeholder="Tài Khoản">
+                </div>
+                <div class="form-group">
+                    <label for="password">MẬT KHẨU</label>
+                    <input type="password" class="form-control" name="password" required placeholder="Mật Khẩu">
+                </div>
+                <div class="btn-login">
+                    <button type="submit" class="btn btn-primary">ĐĂNG NHẬP</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

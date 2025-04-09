@@ -1,0 +1,90 @@
+﻿@{
+    ViewData["Title"] = "Register Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@await Html.PartialAsync("response")
+
+<style>
+    .register-container {
+        margin-top: 120px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(to right, #43cea2, #185a9d);
+        color: white;
+        padding: 60px 0;
+    }
+    
+    .register-container .card {
+        width: 400px;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 12px;
+    }
+
+    .register-container .card-body {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .register-container .card label {
+        margin: 12px 0;
+    }
+
+    .register-container .card .btn-login {
+        margin: 16px 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .register-container .card button {
+
+    }
+</style>
+
+<div class="register-container">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title" style="color: #fff">ĐĂNG KÝ</h5>
+            <form method="post" action="/Account/Register">
+                <div class="mb-3">
+                    <label>HỌ VÀ TÊN</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label>TÊN ĐĂNG NHẬP</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="mb-3">
+                    <label>MẬT KHẨU</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="mb-3">
+                    <label>XÁC NHẬN MẬT KHẨU</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <div class="mb-3">
+                    <label>EMAIL</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label>SỐ ĐIÊN THOẠI</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" >
+                </div>
+                <div class="mb-3">
+                    <label>ĐỊA CHỈ</label>
+                    <input type="text" class="form-control" id="address" name="address" >
+                </div>
+                <div class="form-group">
+                    <label>ẢNH ĐẠI DIỆN</label>
+                    <input class="form-control" name="file" type="file" />
+                </div>
+                <div class="btn-login">
+                    <button type="submit" class="btn btn-primary">ĐĂNG KÝ</button>
+                </div>
+            </form>
+            <p class="text-center">ĐÃ CÓ TÀI KHOẢN ?  <a href="/Account/Login">ĐĂNG NHẬP</a></p>
+        </div>
+    </div>
+</div>

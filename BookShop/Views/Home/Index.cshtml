@@ -1,0 +1,286 @@
+﻿@model List<BookShop.Data.Dtos.ProductDto>
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var Categories = ViewBag.Categories;
+}
+@await Html.PartialAsync("response")
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+<style>
+    .chat-box-all {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        z-index: 999;
+    }
+    .chat-container {
+        max-width: 400px;
+        margin: auto;
+    }
+
+    .ai-box {
+        display: none;
+        background-color: #fff;
+        box-shadow: 1px;
+        border: 1px solid #c3c3c3;
+        border-radius: 12px;
+        padding: 16px 16px;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }
+
+    .ai-box.chat-ai-clicked {
+        display: block;
+    }
+
+    .button-chat-ai {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        z-index: 1000;
+        /* padding: 20px; */
+        background-color: dodgerblue;
+        color: #fff;
+        font-size: 26px;
+        width: 64px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .button-chat-ai.chat-ai-clicked {
+        display: none;
+    }
+
+    .button-chat-ai:hover {
+            background-color: #1878d5;
+        }
+
+    .chat-box {
+        height: 400px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        background: #f9f9f9;
+    }
+
+    .user-message {
+        text-align: right;
+        background-color: #007bff;
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+    }
+
+    .bot-message {
+        text-align: left;
+        background-color: #28a745;
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+    }
+
+    .typing-indicator {
+        font-style: italic;
+        color: gray;
+        display: none;
+    }
+
+    .chat-box-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+    }
+</style>
+
+<!-- Carousel Start -->
+<div class="container-fluid p-0 mb-5 wow fadeIn" data-wow-delay="0.1s">
+    <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="w-100" style="height: 700px;" src="~/img/anh1.jpg" alt="Image">
+            </div>
+            <div class="carousel-item">
+                <img class="w-100" style="height: 700px;" src="~/img/2.jpg" alt="Image">
+            </div>
+            <div class="carousel-item">
+                <img class="w-100" style="height: 700px;" src="~/img/3.jpg" alt="Image">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel"
+                data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#header-carousel"
+                data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+<!-- Carousel End -->
+<!-- Product Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-0 gx-5 align-items-end">
+            <div class="col-lg-6">
+                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                    <h1 class="display-5 mb-3">Sản phẩm</h1>
+                </div>
+            </div>
+            <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
+                <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
+                    <li class="nav-item me-2">
+                        <button class="btn btn-outline-primary border-2 active" data-bs-toggle="pill" onclick="FillterByCategory(0)">Tất cả</button>
+                    </li>
+                    @if (Categories != null)
+                    {
+                        foreach (var item in Categories)
+                        {
+                            <li class="nav-item me-2">
+                                <button class="btn btn-outline-primary border-2" data-bs-toggle="pill" onclick="FillterByCategory(@item.category_id)">@item.name</button>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="tab-content">
+            <div id="tab-1" class="tab-pane fade show p-0 active">
+                <div class="row g-4" id="productListContainer">
+                    @Html.Partial("ProductList", Model)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="chat-box-all">
+    <div class="button-chat-ai" id="btnChatAi"><i class="fa-solid fa-comment"></i></div>
+    <div class="container mt-5 chat-container ai-box" id="aiBox">
+        <div class="chat-box-title">
+            <h4 class="text-center">Chat with AI</h4>
+            <i class="fa-solid fa-xmark chat-box-close-btn" id="chatCloseBtn" style="cursor: pointer;"></i>
+        </div>
+        <div id="chat-box" class="chat-box">
+            <div id="typing-indicator" class="typing-indicator">AI is typing...</div>
+        </div>
+        <div class="input-group">
+            <input type="text" id="question-input" class="form-control" placeholder="Ask something..." />
+            <button class="btn btn-primary" onclick="askLLM()">Send</button>
+        </div>
+    </div>
+    <</div>
+
+<script>
+    $(document).ready(function() {
+        let chatBoxIcon = document.getElementById("btnChatAi");
+        const chatBoxIconClasses = chatBoxIcon.classList;
+        let chatCloseBtn = document.getElementById("chatCloseBtn");
+        const chatCloseBtnClasses = chatCloseBtn.classList;
+        let aiBox = document.getElementById("aiBox");
+        const aiBoxClasses = aiBox.classList;
+        let typingIndicator = document.getElementById("typing-indicator");
+
+        chatBoxIcon.addEventListener("click", () => {
+            chatBoxIconClasses.toggle("chat-ai-clicked");
+            aiBoxClasses.toggle("chat-ai-clicked");
+        });
+
+        chatCloseBtn.addEventListener("click", () => {
+            chatBoxIconClasses.toggle("chat-ai-clicked");
+            aiBoxClasses.toggle("chat-ai-clicked");
+        });
+    });
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/chatHub")
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+
+    connection.on("ReceiveMessage", function (message) {
+        // let chatBoxIcon = document.getElementById("btnChatAi");
+        // const chatBoxIconClasses = chatBoxIcon.classList;
+        let chatBox = document.getElementById("chat-box");
+        // const chatBoxClasses = chatBox.classList;
+        let typingIndicator = document.getElementById("typing-indicator");
+
+        // Hide typing indicator once response starts coming
+        typingIndicator.style.display = "none";
+
+        // Check if we're already building a response for this question
+        let botMessages = chatBox.getElementsByClassName("bot-message");
+        let botMessage = botMessages[botMessages.length - 1]; // Get the latest bot message
+
+        if (!botMessage || botMessage.dataset.completed === "true") {
+            // Create a NEW bot message if this is a new response
+            botMessage = document.createElement("div");
+            botMessage.className = "bot-message";
+            botMessage.style.color = "white"; // Green text for responses
+            botMessage.dataset.completed = "false"; // Mark as incomplete
+            chatBox.appendChild(botMessage);
+        }
+
+        // Split multiple streamed messages in case they arrive in chunks
+        const messages = message.split("data: ").filter(m => m.trim() !== "");
+
+        messages.forEach((msg) => {
+            try {
+                const parsedData = JSON.parse(msg.trim());
+                if (parsedData.response) {
+                    botMessage.textContent += parsedData.response;
+                }
+                if (parsedData.done) {
+                    botMessage.dataset.completed = "true"; // Mark as complete
+                }
+            } catch (error) {
+                console.error("Error parsing JSON from SSE:", error);
+            }
+        });
+
+        // Auto-scroll to latest message
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    async function askLLM() {
+        let questionInput = document.getElementById("question-input");
+        let chatBox = document.getElementById("chat-box");
+        let typingIndicator = document.getElementById("typing-indicator");
+        let question = questionInput.value.trim();
+        if (!question) return;
+
+        let userMsg = document.createElement("div");
+        userMsg.className = "user-message";
+        userMsg.textContent = question;
+        chatBox.appendChild(userMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        questionInput.value = "";
+
+        // Show typing indicator while waiting for response
+        typingIndicator.style.display = "block";
+
+        await connection.invoke("SendQuestion", question);
+    }
+
+    // ✅ Fix: Allow Enter Key to Send Message
+    document.getElementById("question-input").addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault(); // Prevents line break in input field
+            askLLM(); // Calls the function to send the message
+        }
+    });
+
+    connection.start().catch(function (err) {
+        return console.error(err.toString());
+    });
+</script>
+<!-- Product End -->
