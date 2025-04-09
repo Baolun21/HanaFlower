@@ -85,7 +85,9 @@
 
                             <form asp-action="Index" asp-controller="ThanhToan" method="post">
                                 <div class="col-md-4">
-                                    <input type="hidden" name="TongTien" value="@total" />
+                                    <input type="hidden" name="TongTien" value="@total.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)" />
+        
+                                    <!-- Các trường khác giữ nguyên -->
                                     <div class="mb-3">
                                         <label class="form-label">Họ tên</label>
                                         <input type="text" class="form-control" name="TenKH" required placeholder="Tên khách hàng" value="@Context.Session.GetString("name")" />
@@ -96,7 +98,6 @@
                                         <input type="tel" class="form-control" name="SDT" required placeholder="Số điện thoại" value="@Context.Session.GetString("phone")" />
                                     </div>
 
-
                                     <div class="mb-3">
                                         <label class="form-label">Email</label>
                                         <input type="email" class="form-control" name="Email" required placeholder="Email" value="@Context.Session.GetString("email")" />
@@ -106,14 +107,23 @@
                                         <label class="form-label">Địa chỉ giao</label>
                                         <input type="text" class="form-control" name="DiaChiGiao" required placeholder="Địa chỉ giao" value="@Context.Session.GetString("address")" />
                                     </div>
+        
                                     <div class="mb-3">
                                         <label class="form-label">Ghi chú</label>
                                         <input type="text" class="form-control" name="note" placeholder="Ghi chú" value="" />
                                     </div>
                                 </div>
+    
+                                <!-- Hiển thị tổng tiền để người dùng xác nhận -->
+                                <div class="mb-3">
+                                    <label class="form-label">Tổng tiền thanh toán:</label>
+                                    <strong>@Convert.ToDecimal(total).ToString("#,##0") đồng</strong>
+                                </div>
+    
                                 <button type="submit" class="btn btn-success">Gửi đơn hàng</button>
                                 <a href="/" class="btn btn-success">Tiếp tục mua hàng</a>
                             </form>
+
 
                         }
 
@@ -126,7 +136,7 @@
 
 
                         @section Scripts {
-                        <script>
+                            <script>
                             $(document).ready(function () {
                                 $(".updatecartitem").click(function (event) {
                                     event.preventDefault();
@@ -160,3 +170,10 @@
         </div>
     </div>
 </div>
+
+<script>
+    $("form").on("submit", function() {
+        console.log("Tổng tiền gửi đi: " + $("input[name='TongTien']").val());
+        return true; // Cho phép form tiếp tục submit
+    });
+</script>

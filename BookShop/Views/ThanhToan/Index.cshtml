@@ -1,128 +1,119 @@
-﻿
+﻿<main role="main">
+    <!-- Block content - Đục lỗ trên giao diện bố cục chung, đặt tên là `content` -->
+    <div class="container mt-4">
+        <form asp-action="AddOrder" asp-controller="Cart" method="post">
+            <input type="hidden" name="kh_tendangnhap" value="dnpcuong">
+            <!-- Thêm input hidden để truyền tổng tiền -->
+            <input type="hidden" name="TongTien" value="@ViewBag.TongTien" />
 
-   <main role="main">
-        <!-- Block content - Đục lỗ trên giao diện bố cục chung, đặt tên là `content` -->
-        <div class="container mt-4"> 
-            <form asp-action="AddOrder" asp-controller="Cart" method="post">
-                <input type="hidden" name="kh_tendangnhap" value="dnpcuong">
+            <div class="py-5 text-center" style="margin-top:100px">
+                <i class="fa fa-credit-card fa-4x" aria-hidden="true"></i>
+                <h2>Thanh toán</h2>
+                <p class="lead">Vui lòng kiểm tra thông tin Khách hàng, thông tin Giỏ hàng trước khi Đặt hàng.</p>
+            </div>
 
-                <div class="py-5 text-center" style=" margin-top :100px">
-                    <i class="fa fa-credit-card fa-4x" aria-hidden="true"></i>
-                    <h2>Thanh toán</h2>
-                    <p class="lead">Vui lòng kiểm tra thông tin Khách hàng, thông tin Giỏ hàng trước khi Đặt hàng.</p>
-                </div>
-
-                <div class="row">
-                 @*    <div class="col-md-4 order-md-2 mb-4">
-                        <h4 class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="text-muted">Giỏ hàng</span>
-                            <span class="badge badge-secondary badge-pill">2</span>
-                        </h4>
-                        <ul class="list-group mb-3">
-                            <input type="hidden" name="sanphamgiohang[1][sp_ma]" value="2">
-                            <input type="hidden" name="sanphamgiohang[1][gia]" value="11800000.00">
-                            <input type="hidden" name="sanphamgiohang[1][soluong]" value="2">
-
+            <div class="row">
+                @*<div class="col-md-5 order-md-2 mb-4">
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Giỏ hàng</span>
+                        $1$<span class="badge badge-secondary badge-pill">@ViewBag.CartItems.Count</span>#1#
+                    </h4>
+                    <ul class="list-group mb-3">
+                        @foreach (var item in ViewBag.CartItems)
+                        {
                             <li class="list-group-item d-flex justify-content-between lh-condensed">
                                 <div>
-                                    <h6 class="my-0">Apple Ipad 4 Wifi 16GB</h6>
-                                    <small class="text-muted">11800000.00 x 2</small>
+                                    <h6 class="my-0">@item.Product.name</h6>
+                                    <small class="text-muted">@Convert.ToDecimal(item.Product.price).ToString("#,##0") đồng x @item.Quantity</small>
                                 </div>
-                                <span class="text-muted">23600000</span>
+                                <span class="text-muted">@Convert.ToDecimal(item.Product.price * item.Quantity).ToString("#,##0") đồng</span>
                             </li>
-                            <input type="hidden" name="sanphamgiohang[2][sp_ma]" value="4">
-                            <input type="hidden" name="sanphamgiohang[2][gia]" value="14990000.00">
-                            <input type="hidden" name="sanphamgiohang[2][soluong]" value="8">
+                        }
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Tổng thành tiền</span>
+                            <strong>@Convert.ToDecimal(ViewBag.TongTien).ToString("#,##0") đồng</strong>
+                        </li>
+                    </ul>
 
-                            <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                <div>
-                                    <h6 class="my-0">Apple iPhone 5 16GB White</h6>
-                                    <small class="text-muted">14990000.00 x 8</small>
-                                </div>
-                                <span class="text-muted">119920000</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>Tổng thành tiền</span>
-                                <strong>143520000</strong>
-                            </li>
-                        </ul>
-
-
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Mã khuyến mãi">
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-secondary">Xác nhận</button>
-                            </div>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Mã khuyến mãi">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-secondary">Xác nhận</button>
                         </div>
-
-                    </div> *@
-                    <div class="col-md-12 order-md-1">
-                        <h4 class="mb-3">Thông tin khách hàng</h4>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label for="kh_ten">Họ tên</label>
-                                <input type="text" class="form-control" name="kh_ten" id="kh_ten">
-                            </div>
-                            <div class="col-md-12">
-                                <label for="kh_gioitinh">Giới tính</label>
-                                <input type="text" class="form-control" name="kh_gioitinh" id="kh_gioitinh">
-                            </div>
-                            <div class="col-md-12">
-                                <label for="kh_diachi">Địa chỉ</label>
-                                <input type="text" class="form-control" name="kh_diachi" id="kh_diachi"
-                                       >
-                            </div>
-                            <div class="col-md-12">
-                                <label for="kh_dienthoai">Điện thoại</label>
-                                <input type="text" class="form-control" name="kh_dienthoai" id="kh_dienthoai"
-                                      >
-                            </div>
-                            <div class="col-md-12">
-                                <label for="kh_email">Email</label>
-                                <input type="text" class="form-control" name="kh_email" id="kh_email"
-                                       >
-                            </div>
-                            <div class="col-md-12">
-                                <label for="kh_ngaysinh">Ngày sinh</label>
-                                <input type="text" class="form-control" name="kh_ngaysinh" id="kh_ngaysinh"
-                                       >
-                            </div>
-                            <div class="col-md-12">
-                                <label for="kh_cmnd">CMND</label>
-                                <input type="text" class="form-control" name="kh_cmnd" id="kh_cmnd" >
-                            </div>
-                        </div>
-
-                        <h4 class="mb-3">Hình thức thanh toán</h4>
-
-                        <div class="d-block my-3">
-                            <div class="custom-control custom-radio">
-                                <input id="httt-1" name="httt_ma" type="radio" class="custom-control-input" required=""
-                                       value="1">
-                                <label class="custom-control-label" for="httt-1">Tiền mặt</label>
-                            </div>
-                            <div class="custom-control custom-radio">
-                                <input id="httt-2" name="httt_ma" type="radio" class="custom-control-input" required=""
-                                       value="2">
-                                <label class="custom-control-label" for="httt-2">Chuyển khoản</label>
-                            </div>
-                          
-                        </div>
-                    <img id="paymentImage" src="https://img.vietqr.io/image/vietinbank-113366668888-compact.jpg" style="display: none;" alt="Payment Image">
-
-                        <hr class="mb-4">
-                        <button class="btn btn-primary btn-lg btn-block" type="submit" name="btnDatHang">
-                            Đặt
-                            hàng
-                        </button>
                     </div>
-                </div>
-            </form>
+                </div>*@
 
-        </div>
-        <!-- End block content -->
-    </main>
+                <div class="col-md-7 order-md-1">
+                    <h4 class="mb-3">Thông tin khách hàng</h4>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="kh_ten">Họ tên</label>
+                            <input type="text" class="form-control" name="kh_ten" id="kh_ten" value="@Context.Session.GetString("name")" required>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="kh_gioitinh">Giới tính</label>
+                            <select class="form-control" name="kh_gioitinh" id="kh_gioitinh" required>
+                                <option value="">Chọn giới tính</option>
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                                <option value="Khác">Khác</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="DiaChiGiao">Địa chỉ</label>
+                            <input type="text" class="form-control" name="DiaChiGiao" id="DiaChiGiao" value="@Context.Session.GetString("address")" required>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="SDT">Điện thoại</label>
+                            <input type="text" class="form-control" name="SDT" id="SDT" value="@Context.Session.GetString("phone")" required>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" name="email" id="email" value="@Context.Session.GetString("email")" required>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="kh_ngaysinh">Ngày sinh</label>
+                            <input type="date" class="form-control" name="kh_ngaysinh" id="kh_ngaysinh">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="kh_cmnd">CMND</label>
+                            <input type="text" class="form-control" name="kh_cmnd" id="kh_cmnd">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="note">Ghi chú</label>
+                            <textarea class="form-control" name="note" id="note" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <h4 class="mb-3">Hình thức thanh toán</h4>
+
+                    <div class="d-block my-3">
+                        <div class="custom-control custom-radio">
+                            <input id="httt-1" name="httt_ma" type="radio" class="custom-control-input" required value="1" checked>
+                            <label class="custom-control-label" for="httt-1">Tiền mặt</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input id="httt-2" name="httt_ma" type="radio" class="custom-control-input" required value="2">
+                            <label class="custom-control-label" for="httt-2">Chuyển khoản</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 text-center">
+                        <img id="paymentImage" src="https://img.vietqr.io/image/vietinbank-113366668888-compact.jpg" style="display: none; max-width: 100%;" alt="Payment Image">
+                    </div>
+
+                    <hr class="mb-4">
+                    <button class="btn btn-primary btn-lg btn-block" type="submit" name="btnDatHang">
+                        Đặt hàng
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- End block content -->
+</main>
+
 <script>
     // Lấy tất cả các input radio có name là 'httt_ma'
     const paymentOptions = document.querySelectorAll('input[name="httt_ma"]');
