@@ -51,7 +51,7 @@
                             <label for="kh_ten">Họ tên</label>
                             <input type="text" class="form-control" name="kh_ten" id="kh_ten" value="@Context.Session.GetString("name")" required>
                         </div>
-                        <div class="col-md-12 mb-3">
+                        @*<div class="col-md-12 mb-3">
                             <label for="kh_gioitinh">Giới tính</label>
                             <select class="form-control" name="kh_gioitinh" id="kh_gioitinh" required>
                                 <option value="">Chọn giới tính</option>
@@ -59,7 +59,7 @@
                                 <option value="Nữ">Nữ</option>
                                 <option value="Khác">Khác</option>
                             </select>
-                        </div>
+                        </div>*@
                         <div class="col-md-12 mb-3">
                             <label for="DiaChiGiao">Địa chỉ</label>
                             <input type="text" class="form-control" name="DiaChiGiao" id="DiaChiGiao" value="@Context.Session.GetString("address")" required>
@@ -72,14 +72,14 @@
                             <label for="email">Email</label>
                             <input type="email" class="form-control" name="email" id="email" value="@Context.Session.GetString("email")" required>
                         </div>
-                        <div class="col-md-12 mb-3">
+                        @*<div class="col-md-12 mb-3">
                             <label for="kh_ngaysinh">Ngày sinh</label>
                             <input type="date" class="form-control" name="kh_ngaysinh" id="kh_ngaysinh">
                         </div>
                         <div class="col-md-12 mb-3">
                             <label for="kh_cmnd">CMND</label>
                             <input type="text" class="form-control" name="kh_cmnd" id="kh_cmnd">
-                        </div>
+                        </div>*@
                         <div class="col-md-12 mb-3">
                             <label for="note">Ghi chú</label>
                             <textarea class="form-control" name="note" id="note" rows="3"></textarea>
@@ -97,11 +97,13 @@
                             <input id="httt-2" name="httt_ma" type="radio" class="custom-control-input" required value="2">
                             <label class="custom-control-label" for="httt-2">Chuyển khoản</label>
                         </div>
+                        <!-- Thêm input ẩn để lưu giá trị LoaiGiaoDich -->
+                        <input type="hidden" id="LoaiGiaoDich" name="LoaiGiaoDich" value="2">
                     </div>
 
-                    <div class="mb-4 text-center">
+                    @*<div class="mb-4 text-center">
                         <img id="paymentImage" src="https://img.vietqr.io/image/vietinbank-113366668888-compact.jpg" style="display: none; max-width: 100%;" alt="Payment Image">
-                    </div>
+                    </div>*@
 
                     <hr class="mb-4">
                     <button class="btn btn-primary btn-lg btn-block" type="submit" name="btnDatHang">
@@ -128,6 +130,32 @@
             } else {
                 paymentImage.style.display = 'none';
             }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Lấy tham chiếu đến các radio button và trường ẩn
+        var radios = document.querySelectorAll('input[name="httt_ma"]');
+        var loaiGiaoDichInput = document.getElementById('LoaiGiaoDich');
+
+        // Thiết lập giá trị ban đầu dựa trên radio được chọn sẵn
+        if (document.getElementById('httt-1').checked) {
+            loaiGiaoDichInput.value = "2";
+        } else if (document.getElementById('httt-2').checked) {
+            loaiGiaoDichInput.value = "1";
+        }
+
+        // Thêm sự kiện lắng nghe cho mỗi radio button
+        radios.forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                if (this.id === 'httt-1') {
+                    loaiGiaoDichInput.value = "2";
+                } else if (this.id === 'httt-2') {
+                    loaiGiaoDichInput.value = "1";
+                }
+            });
         });
     });
 </script>

@@ -6,6 +6,7 @@ namespace BookShop.Data.Models
     {
         [Key]
         public int order_id { get; set; }
+        public long? payment_id { get; set; }
         public int user_id { get; set; }
         public string? phone { get; set; }
         public string? email { get; set; }

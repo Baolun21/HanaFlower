@@ -8,6 +8,7 @@
         public string? email { get; set; }
         public string? note { get; set; }
         public decimal TongTien { get; set; }
+        public int LoaiGiaoDich { get; set; } = 0; // 0. Tien mat, 1. Chuyen khoan
         public List<CartItem>? CartItems { get; set; }
     }
 }

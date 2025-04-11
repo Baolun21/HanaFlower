@@ -4,6 +4,19 @@
     ViewData["Title"] = "QL_NguoiDung Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<style>
+    .invalid-feedback {
+        display: none;
+        color: #dc3545;
+        margin-top: 0.25rem;
+    }
+
+    .is-invalid {
+        border-color: #dc3545;
+    }
+</style>
+
 @await Html.PartialAsync("response")
 
 <div class="container-xxl py-5" style="margin-top: 100px">
@@ -64,39 +77,55 @@
                                             <div class="modal fade" id="@("update"+item.user_id)" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
-                                                        <form method="post" asp-action="Edit" asp-controller="AdminUser">
+                                                        <form method="post" asp-action="Edit" asp-controller="AdminUser" id="editUserForm_@item.user_id" class="edit-user-form" data-user-id="@item.user_id" novalidate>
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" id="productModalLabel">Chỉnh sửa sản phẩm</h5>
+                                                                <h5 class="modal-title" id="productModalLabel">Chỉnh sửa người dùng</h5>
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div class="form-group">
-                                                                    <label>Tên người dùng </label>
+                                                                    <label>Tên người dùng <span class="text-danger">*</span></label>
                                                                     <input type="hidden" value="@item.user_id" name="user_id" />
-                                                                    <input type="text" class="form-control" name="name" value="@item.name" required placeholder="Nhập tên người dùng">
+                                                                    <input type="text" class="form-control" id="name_@item.user_id" name="name" value="@item.name" required
+                                                                           minlength="3" pattern=".*[a-zA-ZÀ-ỹ].*"
+                                                                           placeholder="Nhập tên người dùng">
+                                                                    <div class="invalid-feedback">Tên người dùng phải chứa ít nhất 1 kí tự chữ và dài ít nhất 3 kí tự</div>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label>Tên đăng nhập</label>
-                                                                    <input class="form-control" name="author" value="@item.username" placeholder="Nhập tên đăng nhập" required />
+                                                                    <label>Tên đăng nhập <span class="text-danger">*</span></label>
+                                                                    <input class="form-control" id="author_@item.user_id" name="author" value="@item.username"
+                                                                           required minlength="3" pattern="^[a-zA-Z0-9]+$"
+                                                                           placeholder="Nhập tên đăng nhập" />
+                                                                    <div class="invalid-feedback">Tên đăng nhập phải chứa ít nhất 1 kí tự chữ, dài ít nhất 3 kí tự, không dấu, không dấu cách, không kí tự đặc biệt</div>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label>Email</label>
-                                                                    <input class="form-control" name="email" value="@item.email" placeholder="Nhập email" type="email" required />
+                                                                    <label>Email <span class="text-danger">*</span></label>
+                                                                    <input class="form-control" id="email_@item.user_id" name="email" value="@item.email"
+                                                                           placeholder="Nhập email" type="email" required />
+                                                                    <div class="invalid-feedback">Vui lòng nhập địa chỉ email hợp lệ</div>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label>Số điện thoại</label>
-                                                                    <input class="form-control" name="phone" value="@item.phone" placeholder="Nhập số điện thoại" required type="tel" />
+                                                                    <label>Số điện thoại <span class="text-danger">*</span></label>
+                                                                    <input class="form-control" id="phone_@item.user_id" name="phone" value="@item.phone"
+                                                                           placeholder="Nhập số điện thoại" required type="tel"
+                                                                           pattern="[0-9]{10}" />
+                                                                    <div class="invalid-feedback">Số điện thoại phải đủ 10 chữ số</div>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label>Địa chỉ</label>
-                                                                    <input class="form-control" name="address" value="@item.address" placeholder="Nhập địa chỉ" />
+                                                                    <label>Địa chỉ <span class="text-danger">*</span></label>
+                                                                    <input class="form-control" id="address_@item.user_id" name="address" value="@item.address"
+                                                                           placeholder="Nhập địa chỉ" required minlength="3"
+                                                                           pattern=".*[a-zA-ZÀ-ỹ].*" />
+                                                                    <div class="invalid-feedback">Địa chỉ phải chứa ít nhất 1 kí tự chữ và dài ít nhất 3 kí tự</div>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label>Quyền</label>
-                                                                    <select name="role" class="form-control">
-                                                                        <option selected="@(item.role == "Customer")">Customer</option>
-                                                                        <option selected="@(item.role == "Store Owner")">Store Owner</option>
-                                                                        <option selected="@(item.role == "Admin")">Admin</option>
+                                                                    <label>Quyền <span class="text-danger">*</span></label>
+                                                                    <select name="role" id="role_@item.user_id" class="form-control" required>
+                                                                        <option value="" disabled>-- Chọn quyền --</option>
+                                                                        <option value="Customer" selected="@(item.role == "Customer")">Customer</option>
+                                                                        <option value="Store Owner" selected="@(item.role == "Store Owner")">Store Owner</option>
+                                                                        <option value="Admin" selected="@(item.role == "Admin")">Admin</option>
                                                                     </select>
+                                                                    <div class="invalid-feedback">Vui lòng chọn quyền</div>
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
@@ -104,6 +133,7 @@
                                                                 <button type="submit" class="btn btn-success">Sửa</button>
                                                             </div>
                                                         </form>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -127,46 +157,66 @@
 <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <form method="post" asp-action="Create" asp-controller="AdminUser">
+            <form method="post" asp-action="Create" asp-controller="AdminUser" id="userForm" novalidate>
                 <div class="modal-header">
                     <h5 class="modal-title" id="productModalLabel">Thêm mới người dùng</h5>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Tên người dùng</label>
-                        <input type="text" class="form-control" name="name" required placeholder="Nhập tên người dùng">
+                        <label>Tên người dùng <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="name" name="name" required
+                               minlength="3" pattern=".*[a-zA-ZÀ-ỹ].*"
+                               placeholder="Nhập tên người dùng">
+                        <div class="invalid-feedback" id="nameError">Tên người dùng phải chứa ít nhất 1 kí tự chữ và dài ít nhất 3 kí tự</div>
                     </div>
                     <div class="form-group">
-                        <label>Tên đăng nhập</label>
-                        <input class="form-control" name="username" placeholder="Nhập tên đăng nhập" required />
+                        <label>Tên đăng nhập <span class="text-danger">*</span></label>
+                        <input class="form-control" id="username" name="username"
+                               required minlength="3" pattern="^[a-zA-Z0-9]+$"
+                               placeholder="Nhập tên đăng nhập" />
+                        <div class="invalid-feedback" id="usernameError">Tên đăng nhập phải chứa ít nhất 1 kí tự chữ, dài ít nhất 3 kí tự, không dấu, không dấu cách, không kí tự đặc biệt</div>
                     </div>
                     <div class="form-group">
-                        <label>Mật khẩu</label>
-                        <input class="form-control" type="password" name="password" placeholder="Nhập mật khẩu" required />
-                    </div>
-                     <div class="form-group">
-                        <label>Xác nhận mật khẩu</label>
-                        <input class="form-control" type="password" name="confirmPassword" placeholder="Nhập xác nhận mật khẩu" required />
+                        <label>Mật khẩu <span class="text-danger">*</span></label>
+                        <input class="form-control" type="password" id="password" name="password"
+                               placeholder="Nhập mật khẩu" required />
+                        <div class="invalid-feedback" id="passwordRequiredError">Vui lòng nhập mật khẩu</div>
                     </div>
                     <div class="form-group">
-                        <label>Email</label>
-                        <input class="form-control" name="email" placeholder="Nhập email" required type="email" />
+                        <label>Xác nhận mật khẩu <span class="text-danger">*</span></label>
+                        <input class="form-control" type="password" id="confirmPassword" name="confirmPassword"
+                               placeholder="Nhập xác nhận mật khẩu" required />
+                        <div class="invalid-feedback" id="confirmPasswordError">Mật khẩu xác nhận không khớp!</div>
                     </div>
                     <div class="form-group">
-                        <label>Số điện thoại</label>
-                        <input class="form-control" name="phone" placeholder="Nhập số điện thoại" required type="tel" />
+                        <label>Email <span class="text-danger">*</span></label>
+                        <input class="form-control" id="email" name="email"
+                               placeholder="Nhập email" type="email" required />
+                        <div class="invalid-feedback" id="emailError">Vui lòng nhập địa chỉ email hợp lệ</div>
                     </div>
                     <div class="form-group">
-                        <label>Địa chỉ</label>
-                        <input class="form-control" name="address" required />
+                        <label>Số điện thoại <span class="text-danger">*</span></label>
+                        <input class="form-control" id="phone" name="phone"
+                               placeholder="Nhập số điện thoại" required type="tel"
+                               pattern="[0-9]{10}" />
+                        <div class="invalid-feedback" id="phoneError">Số điện thoại phải đủ 10 chữ số</div>
                     </div>
                     <div class="form-group">
-                        <label>Quyền</label>
-                        <select name="role" class="form-control">
+                        <label>Địa chỉ <span class="text-danger">*</span></label>
+                        <input class="form-control" id="address" name="address"
+                               placeholder="Nhập địa chỉ" required minlength="3"
+                               pattern=".*[a-zA-ZÀ-ỹ].*" />
+                        <div class="invalid-feedback" id="addressError">Địa chỉ phải chứa ít nhất 1 kí tự chữ và dài ít nhất 3 kí tự</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Quyền <span class="text-danger">*</span></label>
+                        <select name="role" id="role" class="form-control" required>
+                            <option value="">-- Chọn quyền --</option>
                             <option>Customer</option>
                             <option>Store Owner</option>
                             <option>Admin</option>
                         </select>
+                        <div class="invalid-feedback" id="roleError">Vui lòng chọn quyền</div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -177,3 +227,216 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('userForm').addEventListener('submit', function(e) {
+        var form = this;
+        var isValid = true;
+
+        // Reset previous errors
+        var errorMessages = form.querySelectorAll('.invalid-feedback');
+        errorMessages.forEach(function(element) {
+            element.style.display = 'none';
+        });
+
+        var inputs = form.querySelectorAll('input, select');
+        inputs.forEach(function(input) {
+            input.classList.remove('is-invalid');
+
+            // Check required fields
+            if (input.hasAttribute('required') && !input.value.trim()) {
+                input.classList.add('is-invalid');
+                var errorId = input.id + 'Error';
+                var errorElement = document.getElementById(errorId);
+                if (errorElement) {
+                    errorElement.style.display = 'block';
+                }
+                isValid = false;
+            }
+
+            // Check min length
+            if (input.hasAttribute('minlength') && input.value.length < input.getAttribute('minlength')) {
+                input.classList.add('is-invalid');
+                var errorId = input.id + 'Error';
+                var errorElement = document.getElementById(errorId);
+                if (errorElement) {
+                    errorElement.style.display = 'block';
+                }
+                isValid = false;
+            }
+
+            // Check pattern
+            if (input.hasAttribute('pattern') && input.value) {
+                var pattern = new RegExp(input.getAttribute('pattern'));
+                if (!pattern.test(input.value)) {
+                    input.classList.add('is-invalid');
+                    var errorId = input.id + 'Error';
+                    var errorElement = document.getElementById(errorId);
+                    if (errorElement) {
+                        errorElement.style.display = 'block';
+                    }
+                    isValid = false;
+                }
+            }
+
+            // Check email format
+            if (input.type === 'email' && input.value) {
+                var emailValid = input.value.indexOf("@@") > 0 &&
+                    input.value.indexOf('.') > 0 &&
+                    input.value.indexOf('@@') < input.value.lastIndexOf('.');
+                if (!emailValid) {
+                    input.classList.add('is-invalid');
+                    var errorId = input.id + 'Error';
+                    var errorElement = document.getElementById(errorId);
+                    if (errorElement) {
+                        errorElement.style.display = 'block';
+                    }
+                    isValid = false;
+                }
+            }
+        });
+
+        // Check if passwords match
+        var password = document.getElementById('password');
+        var confirmPassword = document.getElementById('confirmPassword');
+        if (password.value !== confirmPassword.value) {
+            confirmPassword.classList.add('is-invalid');
+            document.getElementById('confirmPasswordError').style.display = 'block';
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+
+    // Add validation on input
+    var inputs = document.querySelectorAll('#userForm input, #userForm select');
+    inputs.forEach(function(input) {
+        input.addEventListener('input', function() {
+            // Hide error when user starts typing
+            var errorId = this.id + 'Error';
+            var errorElement = document.getElementById(errorId);
+            if (errorElement) {
+                errorElement.style.display = 'none';
+            }
+            this.classList.remove('is-invalid');
+
+            // Special handling for confirm password
+            if (this.id === 'confirmPassword' || this.id === 'password') {
+                var password = document.getElementById('password');
+                var confirmPassword = document.getElementById('confirmPassword');
+                if (confirmPassword.value && password.value !== confirmPassword.value) {
+                    confirmPassword.classList.add('is-invalid');
+                    document.getElementById('confirmPasswordError').style.display = 'block';
+                } else if (confirmPassword.value) {
+                    confirmPassword.classList.remove('is-invalid');
+                    document.getElementById('confirmPasswordError').style.display = 'none';
+                }
+            }
+        });
+    });
+    
+</script>
+
+<script>
+    // Thêm JavaScript này vào phần script của trang
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tìm tất cả các form chỉnh sửa
+        var forms = document.querySelectorAll('.edit-user-form');
+
+        // Thêm sự kiện cho mỗi form
+        forms.forEach(function(form) {
+            form.addEventListener('submit', function(e) {
+                var isValid = true;
+
+                // Reset previous errors
+                var errorMessages = this.querySelectorAll('.invalid-feedback');
+                errorMessages.forEach(function(element) {
+                    element.style.display = 'none';
+                });
+
+                var inputs = this.querySelectorAll('input, select');
+                inputs.forEach(function(input) {
+                    input.classList.remove('is-invalid');
+
+                    // Skip hidden inputs
+                    if (input.type === 'hidden') {
+                        return;
+                    }
+
+                    // Check required fields
+                    if (input.hasAttribute('required') && !input.value.trim()) {
+                        input.classList.add('is-invalid');
+                        var errorElement = input.nextElementSibling;
+                        if (errorElement && errorElement.classList.contains('invalid-feedback')) {
+                            errorElement.style.display = 'block';
+                        }
+                        isValid = false;
+                    }
+
+                    // Check min length
+                    if (input.hasAttribute('minlength') && input.value.length < input.getAttribute('minlength')) {
+                        input.classList.add('is-invalid');
+                        var errorElement = input.nextElementSibling;
+                        if (errorElement && errorElement.classList.contains('invalid-feedback')) {
+                            errorElement.style.display = 'block';
+                        }
+                        isValid = false;
+                    }
+
+                    // Check pattern
+                    if (input.hasAttribute('pattern') && input.value) {
+                        var pattern = new RegExp(input.getAttribute('pattern'));
+                        if (!pattern.test(input.value)) {
+                            input.classList.add('is-invalid');
+                            var errorElement = input.nextElementSibling;
+                            if (errorElement && errorElement.classList.contains('invalid-feedback')) {
+                                errorElement.style.display = 'block';
+                            }
+                            isValid = false;
+                        }
+                    }
+
+                    // Check email format
+                    if (input.type === 'email' && input.value) {
+                        var emailValid = input.value.indexOf('@@') > 0 &&
+                            input.value.indexOf('.') > 0 &&
+                            input.value.indexOf('@@') < input.value.lastIndexOf('.');
+                        if (!emailValid) {
+                            input.classList.add('is-invalid');
+                            var errorElement = input.nextElementSibling;
+                            if (errorElement && errorElement.classList.contains('invalid-feedback')) {
+                                errorElement.style.display = 'block';
+                            }
+                            isValid = false;
+                        }
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                }
+            });
+
+            // Add validation on input
+            var inputs = form.querySelectorAll('input, select');
+            inputs.forEach(function(input) {
+                // Skip hidden inputs
+                if (input.type === 'hidden') {
+                    return;
+                }
+
+                input.addEventListener('input', function() {
+                    // Hide error when user starts typing
+                    this.classList.remove('is-invalid');
+                    var errorElement = this.nextElementSibling;
+                    if (errorElement && errorElement.classList.contains('invalid-feedback')) {
+                        errorElement.style.display = 'none';
+                    }
+                });
+            });
+        });
+    });
+</script>
+

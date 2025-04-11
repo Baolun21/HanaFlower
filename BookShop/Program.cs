@@ -3,6 +3,7 @@ using BookShop.Data.Contexts;
 using Microsoft.Extensions.AI;
 using BookShop.Hubs;
 using Microsoft.AspNetCore.HttpOverrides;
+using VNPAY.NET;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,8 @@ builder.Services.AddOutputCache(options =>
         builder.Cache()
             .Expire(TimeSpan.FromMinutes(5)));
 });
+
+builder.Services.AddTransient<IVnpay, Vnpay>();
 
 var app = builder.Build();
 
