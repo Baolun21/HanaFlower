@@ -212,7 +212,7 @@ namespace BookShop.Controllers
                             }
                         }
 
-                        if (request.LoaiGiaoDich == 0)
+                        if (request.LoaiGiaoDich == 2)
                         {
                             TempData["Message"] = "Đặt hàng thành công";
                             TempData["Success"] = true;

@@ -21,26 +21,11 @@ namespace AI.Controllers
         public async Task<IActionResult> AskQuestion([FromBody] ChatRequest request)
         {
             var websiteInfo = new WebsiteInfo();
-            string additionalInfo = string.Empty;
+            string additionalInfo = "Đây là thông tin website của tôi. Tên là HanaFlower, địa chỉ website là hanaflower.click. Mở cửa mỗi ngày từ 9 giờ sáng tới 8 giờ tối. Website chuyên bán các loại hoa, số điện thoại: 0979357611. Sau đây là câu hỏi của tôi: ";
 
-            if (request.Question.Contains("tên", StringComparison.OrdinalIgnoreCase) && request.Question.Contains("web", StringComparison.OrdinalIgnoreCase))
-            {
-                additionalInfo = $"Nếu tôi hỏi tên web, bạn hãy trả lời tên website là {websiteInfo.Name}.";
-            }
-            else if (request.Question.Contains("địa chỉ", StringComparison.OrdinalIgnoreCase))
-            {
-                additionalInfo = $"Nếu tôi hỏi địa chỉ, Địa chỉ của trang web tôi đang hỏi là {websiteInfo.Address}.";
-            }
-            else if (request.Question.Contains("điện thoại", StringComparison.OrdinalIgnoreCase) || request.Question.Contains("dt", StringComparison.OrdinalIgnoreCase) || request.Question.Contains("đt", StringComparison.OrdinalIgnoreCase) || request.Question.Contains("sđt", StringComparison.OrdinalIgnoreCase))
-            {
-                additionalInfo = $"Nếu tôi hỏi số điện thoại, Số điện thoại liên hệ tôi đang hỏi là {websiteInfo.Phone}.";
-            }
-            else if (request.Question.Contains("mail", StringComparison.OrdinalIgnoreCase))
-            {
-                additionalInfo = $"Nếu tôi hỏi email, Email liên hệ tôi đang hỏi là {websiteInfo.Email}.";
-            }
-
-            var fullPrompt = $"{additionalInfo} {request.Question}".Trim();
+            
+            var fullPrompt2 = $"{additionalInfo} {request.Question}".Trim();
+            var fullPrompt = request.Question.Trim();
 
             var payload = new
             {
@@ -50,7 +35,7 @@ namespace AI.Controllers
             };
 
             var jsonContent = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, "http://100.80.241.22:11434/api/generate")
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, "http://100.113.57.83:11434/api/generate")
             {
                 Content = jsonContent
             };
