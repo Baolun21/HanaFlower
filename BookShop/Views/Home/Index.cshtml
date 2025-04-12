@@ -100,6 +100,12 @@
         align-items: center;
 
     }
+    
+    .zalo-box {
+        position: fixed;
+        bottom: 12px;
+        left: 12px;
+    }
 </style>
 
 <!-- Carousel Start -->
@@ -164,6 +170,11 @@
         </div>
     </div>
 </div>
+
+<div class="zalo-box">
+    <a class="zalo-chat-icon" href="https://zalo.me/0379991490" target="_blank"><img class="" alt="Zalo" src="~/img/Icon_of_Zalo.svg" /></a>
+</div>
+
 <div class="chat-box-all">
     <div class="button-chat-ai" id="btnChatAi"><i class="fa-solid fa-comment"></i></div>
     <div class="container mt-5 chat-container ai-box" id="aiBox">
@@ -179,7 +190,7 @@
             <button class="btn btn-primary" onclick="askLLM()">Send</button>
         </div>
     </div>
-    <</div>
+</div>
 
 <script>
     $(document).ready(function() {
